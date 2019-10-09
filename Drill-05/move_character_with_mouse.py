@@ -11,11 +11,11 @@ play = True
 frame = 0
 now_x, now_y = KPU_WIDTH // 2, KPU_HEIGHT // 2
 default_x, default_y = KPU_WIDTH // 2, KPU_HEIGHT // 2
+cursor_x, cursor_y = KPU_WIDTH // 2, KPU_HEIGHT // 2
 dir_x = 0
 mouse_button = 0
 stop = 1
 i = 0
-cursor_x, cursor_y = KPU_WIDTH // 2, KPU_HEIGHT // 2
 
 
 def handle_events():
@@ -36,17 +36,17 @@ def handle_events():
             mouse_button += 1
             now_x, now_y = event.x, KPU_HEIGHT - 1 - event.y
             if default_x < event.x:
-                dir_x += 1;
+                dir_x = 1;
             elif default_x > event.x:
-                dir_x -= 1;
+                dir_x = -1;
 
 
 while play:
     clear_canvas()
     kpu_ground.draw(KPU_WIDTH // 2, KPU_HEIGHT // 2)
-    if dir_x >= 0:
+    if i == 0 and dir_x >= 0:
         character.clip_draw(100, 100 * 3, 100, 100, default_x, default_y)
-    elif dir_x < 0:
+    elif i == 0 and dir_x < 0:
         character.clip_draw(100, 100 * 2, 100, 100, default_x, default_y)
 
     if i < 101 and mouse_button > 0:
