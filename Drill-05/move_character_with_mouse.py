@@ -10,10 +10,14 @@ hide_cursor()
 play = True
 frame = 0
 x, y = KPU_WIDTH // 2, KPU_HEIGHT // 2
+dir_x = 0
+mouse_button = 0
+stop = 1
 
 
 def handle_events():
-    global play, x, y
+    global play, x, y, dir_x, mouse_button
+
     events = get_events()
     for event in events:
         if event.type == SDL_QUIT:
@@ -23,12 +27,21 @@ def handle_events():
                 play = False
         elif event.type == SDL_MOUSEMOTION:
             x, y = event.x, KPU_HEIGHT - 1 - event.y
+        elif event.type == SDL_MOUSEBUTTONDOWN:
+            mouse_button += 1
+            if x > event.x:
+                dir_x += 1;
+            elif x < event.x:
+                dir_x += 1;
+        elif event.type == SDL_MOUSEBUTTONUP:
+            mouse_button -= 1
 
 
 while play:
     clear_canvas()
     kpu_ground.draw(KPU_WIDTH // 2, KPU_HEIGHT // 2)
-    character.clip_draw(frame * 100, 100 * 1, 100, 100, x, y)
+    if mouse_button > 0:
+        character.clip_draw(frame * 100, 100 * 1, 100, 100, x, y)
     cursor.draw(x + 25, y - 26)
 
     update_canvas()
