@@ -14,10 +14,13 @@ default_x, default_y = KPU_WIDTH // 2, KPU_HEIGHT // 2
 dir_x = 0
 mouse_button = 0
 stop = 1
+i = 0
+cursor_x, cursor_y = KPU_WIDTH // 2, KPU_HEIGHT // 2
 
 
 def handle_events():
     global play, default_x, default_y, now_x, now_y, dir_x, mouse_button
+    global cursor_x, cursor_y
 
     events = get_events()
     for event in events:
@@ -27,19 +30,15 @@ def handle_events():
             if event.key == SDLK_ESCAPE:
                 play = False
         elif event.type == SDL_MOUSEMOTION:
-            now_x, now_y = event.x, KPU_HEIGHT - 1 - event.y
+            cursor_x, cursor_y = event.x, KPU_HEIGHT - 1 - event.y
 
         elif event.type == SDL_MOUSEBUTTONDOWN:
             mouse_button += 1
+            now_x, now_y = event.x, KPU_HEIGHT - 1 - event.y
             if default_x < event.x:
                 dir_x += 1;
             elif default_x > event.x:
                 dir_x -= 1;
-            default_x = now_x
-            default_y = now_y
-
-        elif event.type == SDL_MOUSEBUTTONUP:
-            mouse_button -= 1
 
 
 while play:
@@ -50,9 +49,22 @@ while play:
     elif dir_x < 0:
         character.clip_draw(100, 100 * 2, 100, 100, default_x, default_y)
 
-    if mouse_button > 0:
-        character.clip_draw(frame * 100, 100 * 1, 100, 100, now_x, now_y)
-    cursor.draw(now_x + 25, now_y - 26)
+    if i < 101 and mouse_button > 0:
+        i += 1
+        t = i / 100
+        x = (1 - t) * default_x + t * now_x
+        y = (1 - t) * default_y + t * now_y
+        if default_x < now_x:
+            character.clip_draw(frame * 100, 100 * 1, 100, 100, x, y)
+        elif default_x >= now_x:
+            character.clip_draw(frame * 100, 100 * 0, 100, 100, x, y)
+        if i >= 100:
+            i = 0
+            mouse_button = 0
+            default_x = now_x
+            default_y = now_y
+
+    cursor.draw(cursor_x + 25, cursor_y - 26)
 
     update_canvas()
 
