@@ -16,11 +16,12 @@ dir_x = 0
 mouse_button = 0
 stop = 1
 i = 0
+x, y = KPU_WIDTH // 2, KPU_HEIGHT // 2
 
 
 def handle_events():
     global play, default_x, default_y, now_x, now_y, dir_x, mouse_button
-    global cursor_x, cursor_y
+    global cursor_x, cursor_y, i, x, y
 
     events = get_events()
     for event in events:
@@ -34,6 +35,8 @@ def handle_events():
 
         elif event.type == SDL_MOUSEBUTTONDOWN:
             mouse_button += 1
+            i = 0
+            default_x, default_y = x, y
             now_x, now_y = event.x, KPU_HEIGHT - 1 - event.y
             if default_x < event.x:
                 dir_x = 1;
