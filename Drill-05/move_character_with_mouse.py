@@ -28,8 +28,8 @@ def handle_events():
 while play:
     clear_canvas()
     kpu_ground.draw(KPU_WIDTH // 2, KPU_HEIGHT // 2)
-    character.clip_draw(frame * 100, 100 * 1, 100, 100, 500, 500)
-    cursor.draw(x + 25, y + 26)
+    character.clip_draw(frame * 100, 100 * 1, 100, 100, x, y)
+    cursor.draw(x + 25, y - 26)
 
     update_canvas()
 
