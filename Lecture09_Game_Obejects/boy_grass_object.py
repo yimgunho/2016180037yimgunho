@@ -29,10 +29,11 @@ class Small_Ball:
     def __init__(self):
         self.image = load_image('ball21x21.png')
         self.x, self.y = random.randint(50, 750), 599
+        self.down = random.randint(2, 5)
 
     def update(self):
         if self.y >= 71:
-            self.y -= random.randint(1, 7)
+            self.y -= self.down
 
     def draw(self):
         self.image.draw(self.x, self.y)
@@ -42,10 +43,11 @@ class Big_Ball:
     def __init__(self):
         self.image = load_image('ball41x41.png')
         self.x, self.y = random.randint(50, 750), 599
+        self.down = random.randint(2, 5)
 
     def update(self):
         if self.y >= 81:
-            self.y -= random.randint(1, 7)
+            self.y -= self.down
 
     def draw(self):
         self.image.draw(self.x, self.y)
@@ -97,7 +99,7 @@ while running:
         n.draw()
     update_canvas()
 
-    delay(0.01)
+    delay(0.02)
 
 # finalization code
 close_canvas()
