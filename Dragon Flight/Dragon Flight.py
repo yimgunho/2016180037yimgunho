@@ -75,15 +75,19 @@ class Dragon:
         self.frame = 0
         self.x = 350
         self.y = 1000
+        self.hit = 0
 
     def update(self):
         if self.y <= -70:
             self.y = 1000
+            self.hit = 0
+
         self.y -= 10
         self.frame = (self.frame + 1) % 9
 
     def draw(self):
-        self.image.clip_draw(self.frame * 200, 0, 200, 200, self.x, self.y, 130, 130)
+        if self.hit == 0:
+            self.image.clip_draw(self.frame * 200, 0, 200, 200, self.x, self.y, 130, 130)
 
 
 open_canvas(WIDTH, HEIGHT)
@@ -150,6 +154,9 @@ while running:
 
     for monster in dragon:
         monster.update()
+        for bul in bullet:
+            if monster.x - 110 < bul.x < monster.x + 110 and monster.y - 110 < bul.y < monster.y + 110:
+                monster.hit = 1
         monster.draw()
 
     for bul in bullet:
