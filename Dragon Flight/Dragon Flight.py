@@ -48,6 +48,26 @@ class Character:
         self.image.clip_draw(128 * self.frame, 0, 128, 128, self.x, self.y, 140, 140)
 
 
+class Bullet:
+
+    def __init__(self):
+        self.image = load_image('bullet.png')
+        self.x = character.x
+        self.y = 100
+        self.speed = 10
+
+    def update(self):
+        self.y += self.speed
+        if self.y > 900:
+            self.y = -100
+        if self.y == 150:
+            self.x = character.x
+
+    def draw(self):
+        if 900 >= self.y >= 150:
+            self.image.draw(self.x, self.y, 105, 105)
+
+
 class Dragon:
 
     def __init__(self):
@@ -55,7 +75,6 @@ class Dragon:
         self.frame = 0
         self.x = 350
         self.y = 1000
-        pass
 
     def update(self):
         if self.y <= -70:
@@ -64,15 +83,22 @@ class Dragon:
         self.frame = (self.frame + 1) % 9
 
     def draw(self):
-        self.image.clip_draw(self.frame * 200, 0, 200, 200, self.x, self.y, 140, 140)
+        self.image.clip_draw(self.frame * 200, 0, 200, 200, self.x, self.y, 130, 130)
 
 
 open_canvas(WIDTH, HEIGHT)
-count = 1
 
 character = Character()
 background = Background()
+
+bullet = [Bullet() for m in range(20)]
+count = 1
+for bul in bullet:
+    bul.y = 150 - 50 * count
+    count += 1
+
 dragon = [Dragon() for n in range(5)]
+count = 1
 for monster in dragon:
     monster.x = count * 140 - 70
     count += 1
@@ -121,12 +147,17 @@ while running:
 
     background.update()
     background.draw()
-    character.update()
-    character.draw()
 
     for monster in dragon:
         monster.update()
         monster.draw()
+
+    for bul in bullet:
+        bul.update()
+        bul.draw()
+
+    character.update()
+    character.draw()
 
     update_canvas()
     delay(0.02)
