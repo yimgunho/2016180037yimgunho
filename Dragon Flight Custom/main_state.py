@@ -7,18 +7,22 @@ from pico2d import *
 import game_framework
 import title_state
 import pause_state
-import class_state
+from fuction_state import Background
 
 name = "MainState"
+
+background = None
 
 
 
 def enter():
-    pass
+    global background
+    background = Background()
 
 
 def exit():
-    pass
+    global background
+    del background
 
 
 def pause():
@@ -43,11 +47,12 @@ def handle_events():
 
 
 def update():
-    pass
+    background.update()
 
 
 
 def draw():
     clear_canvas()
-
+    background.draw()
+    delay(0.01)
     update_canvas()
