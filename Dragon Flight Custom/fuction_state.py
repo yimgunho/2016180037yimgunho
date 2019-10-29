@@ -7,9 +7,9 @@ HEIGHT = 840
 
 class Background:
 
-    def __init__(self):
+    def __init__(self, a):
         self.image = load_image('background.jpg')
-        self.frame = random.randint(0, 9)
+        self.frame = a
         self.first = HEIGHT // 2
         self.second = HEIGHT // 2 + HEIGHT
 
@@ -39,9 +39,10 @@ class Character:
 
     def update(self):
         if 65 <= self.x and self.change_x < 0:
-            self.x += self.change_x
+            self.x -= self.speed
         elif self.x <= 635 and self.change_x > 0:
-            self.x += self.change_x
+            self.x += self.speed
+
         self.frame = (self.frame + 1) % 6
 
     def draw(self):
@@ -50,41 +51,50 @@ class Character:
 
 class Bullet:
 
-    def __init__(self):
+    def __init__(self, x):
         self.image = load_image('bullet.png')
-        self.x = None
+        self.x = x
         self.y = 100
         self.speed = 10
+        self.atk = 20
 
     def update(self):
         self.y += self.speed
-        if self.y > 900:
-            self.y = -100
-        if self.y == 150:
-            self.x = None
 
     def draw(self):
-        if 900 >= self.y >= 150:
-            self.image.draw(self.x, self.y, 105, 105)
+        self.image.draw(self.x, self.y, 105, 105)
 
 
 class Dragon:
 
-    def __init__(self):
+    def __init__(self, x):
         self.image = load_image('green_dragon.png')
         self.frame = 0
-        self.x = 350
+        self.x = x
         self.y = 1000
-        self.hit = 0
+        self.hp = 40
 
     def update(self):
-        if self.y <= -70:
-            self.y = 1000
-            self.hit = 0
-
         self.y -= 10
         self.frame = (self.frame + 1) % 9
 
+    def damage(self, atk):
+        self.hp -= atk
+
     def draw(self):
-        if self.hit == 0:
+        if self.hp > 0:
             self.image.clip_draw(self.frame * 200, 0, 200, 200, self.x, self.y, 130, 130)
+
+
+class Boom:
+    def __init__(self, x, y):
+        self.image = load_image('boom.png')
+        self.frame = 0
+        self.x = x
+        self.y = y
+
+    def update(self):
+        self.frame = self.frame + 1
+
+    def draw(self):
+        self.image.clip_draw(self.frame * 120, 0, 120, 140, self.x, self.y)

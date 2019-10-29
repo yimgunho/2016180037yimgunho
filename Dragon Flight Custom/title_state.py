@@ -1,32 +1,33 @@
 import game_framework
 from pico2d import *
 import main_state
-
+from fuction_state import Background
 
 name = "TitleState"
-background = None
+ti_background = None
 character = None
 name = None
 start = None
 feeling = None
-custom = None
-orange = None
+character_move = 0
+character_up = True
+count = 0
+start_time = 0.0
+start_draw = True
 
 
 def enter():
-    global character, background, name, start, feeling, custom, orange
-    background = load_image('title_background.png')
+    global character, ti_background, name, start, feeling
+    ti_background = Background(0)
     character = load_image('title_character.png')
     name = load_image('title_name.png')
     start = load_image('title_start.png')
     feeling = load_image('title_feeling.png')
-    custom = load_image('custom.png')
-    orange = load_image('orange.png')
 
 
 def exit():
-    global character, background, name, start, feeling, custom, orange
-    del character, background, name, start, feeling, custom, orange
+    global character, ti_background, name, start, feeling
+    del character, ti_background, name, start, feeling
 
 
 def handle_events():
@@ -43,18 +44,41 @@ def handle_events():
 
 def draw():
     clear_canvas()
-    background.draw(350, 420)
-    character.draw(600, 400, 150, 300)
-    start.draw(350, 200, 700, 150)
+    ti_background.draw()
+    character.draw(500, 250 + character_move, 450, 490)
+    if start_draw:
+        start.draw(350, 150, 600, 100)
     name.draw(350, 620, 500, 300)
-    orange.draw(400, 480, 250, 80)
-    custom.draw(400, 480, 300, 80)
     feeling.draw(350, 420, 700, 840)
+    delay(0.02)
     update_canvas()
 
 
 def update():
-    pass
+    global character_move, character_up, count, start_time, start_draw
+    ti_background.update()
+
+    count = (count + 1) % 2
+
+    if count == 0:
+        if character_move > 20:
+            character_up = 1
+        elif character_move < 0:
+            character_up = 0
+
+        if character_up == 0:
+            character_move += 1
+        elif character_up == 1:
+            character_move -= 1
+
+    if start_time > 0.2:
+        start_time = 0
+        if start_draw:
+            start_draw = False
+        else:
+            start_draw = True
+
+    start_time += 0.01
 
 
 def pause():

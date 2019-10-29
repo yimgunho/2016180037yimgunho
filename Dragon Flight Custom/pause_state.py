@@ -38,7 +38,7 @@ def draw():
     clear_canvas()
     main_state.draw()
     if pause_draw:
-        image.draw(400, 300, 200, 200)
+        image.draw(350, 420, 200, 200)
     update_canvas()
 
 
