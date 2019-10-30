@@ -1,7 +1,7 @@
 import game_framework
 from pico2d import *
 import main_state
-from fuction_state import Background
+from Background import Background
 
 name = "TitleState"
 ti_background = None

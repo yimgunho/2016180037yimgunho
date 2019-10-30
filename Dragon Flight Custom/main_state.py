@@ -7,7 +7,12 @@ from pico2d import *
 import game_framework
 import title_state
 import pause_state
-from fuction_state import Background, Character, Bullet, Dragon, Boom
+from Background import Background
+from Character import Character
+from Bullet import Bullet
+from Dragon import Dragon
+from Boom import Boom
+from Hp_gauge import Hp_gauge
 
 name = "MainState"
 
@@ -17,17 +22,18 @@ dragon = []
 bullet = []
 count = 0
 boom = []
+hp_gauge = []
 
 
 def enter():
-    global background, character, dragon, boom, count, bullet
+    global background, character, dragon, boom, count, bullet, hp_gauge
     background = Background(0)
     character = Character()
     dragon = []
     bullet = []
     count = 0
     boom = []
-
+    hp_gauge = []
 
 def exit():
     pass
@@ -67,12 +73,14 @@ def handle_events():
 
 
 def update():
-    global bullet, count, dragon, boom
+    global bullet, count, dragon, boom, hp_gauge
     background.update()
     character.update()
 
     if len(dragon) == 0:
         dragon = [Dragon(n * 140 - 70) for n in range(1, 6)]
+        for d in range(len(dragon)):
+            hp_gauge += [Hp_gauge(dragon[d].x, dragon[d].y)]
 
     dra = []
     bul = []
@@ -80,6 +88,7 @@ def update():
 
     for d in range(len(dragon)):
         dragon[d].update()
+        hp_gauge[d].update(dragon[d].hp)
         for b in range(len(bullet)):
             if dragon[d].x - 110 < bullet[b].x < dragon[d].x + 110 \
                     and dragon[d].y - 110 < bullet[b].y < dragon[d].y + 110:
@@ -94,6 +103,7 @@ def update():
     for d in dra:
         boom = [Boom(dragon[d].x, dragon[d].y)]
         del dragon[d]
+        del hp_gauge[d]
 
     for o in range(len(boom)):
         boom[o].update()
@@ -132,5 +142,7 @@ def draw():
         dra.draw()
     for bo in boom:
         bo.draw()
+    for hp in hp_gauge:
+        hp.draw()
     delay(0.02)
     update_canvas()
