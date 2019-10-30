@@ -21,12 +21,13 @@ character = None
 dragon = []
 bullet = []
 count = 0
+hit_count = 0
 boom = []
 hp_gauge = []
 
 
 def enter():
-    global background, character, dragon, boom, count, bullet, hp_gauge
+    global background, character, dragon, boom, count, bullet, hp_gauge, hit_count
     background = Background(0)
     character = Character()
     dragon = []
@@ -35,8 +36,11 @@ def enter():
     boom = []
     hp_gauge = []
 
+
 def exit():
     pass
+
+
 #    global background, character, dragon, boom, count, bullet
 #    del background, character, dragon, boom, count, bullet
 
@@ -73,7 +77,7 @@ def handle_events():
 
 
 def update():
-    global bullet, count, dragon, boom, hp_gauge
+    global bullet, count, dragon, boom, hp_gauge, hit_count
     background.update()
     character.update()
 
@@ -97,6 +101,13 @@ def update():
                     dra = [d]
                 bul = [b]
                 break
+        if dragon[d].x - 110 < character.x < dragon[d].x + 110 and \
+                dragon[d].y - 110 < character.y < dragon[d].y + 110:
+            character.hp -= 1
+            dra = [d]
+            character.hit += 1
+            break
+
         if dragon[d].y <= -100:
             dra = [d]
 
@@ -115,12 +126,17 @@ def update():
 
     count = (count + 1) % 10
 
+    if character.hit > 0:
+        hit_count += 1
+        if hit_count > 50:
+            character.hit = 0
+            hit_count = 0
+
     if count == 0:
         bullet += [Bullet(character.x)]
 
-    for d in range(len(dragon)):
-        if dragon[d].x - 110 < character.x < dragon[d].x + 110 and dragon[d].y - 110 < character.y < dragon[d].y + 110:
-            game_framework.push_state(title_state)
+    if character.hp == 0:
+        game_framework.push_state(title_state)
 
     for b in range(len(bullet)):
         bullet[b].update()
@@ -135,7 +151,7 @@ def draw():
     global bullet
     clear_canvas()
     background.draw()
-    character.draw()
+    character.draw(character.hit)
     for bul in bullet:
         bul.draw()
     for dra in dragon:
@@ -144,5 +160,6 @@ def draw():
         bo.draw()
     for hp in hp_gauge:
         hp.draw()
+
     delay(0.02)
     update_canvas()

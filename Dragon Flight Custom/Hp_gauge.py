@@ -14,4 +14,4 @@ class Hp_gauge:
         self.hp = hp
 
     def draw(self):
-        self.image.clip_draw(0, 12, self.hp, 12, self.x, self.y)
+        self.image.clip_draw(0, 0, 100, 12, self.x, self.y, self.hp, 12)
