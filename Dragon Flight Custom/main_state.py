@@ -12,7 +12,7 @@ from Character import Character
 from Bullet import Bullet
 from Dragon import Dragon
 from Boom import Boom
-from Hp_gauge import Hp_gauge
+from HPGauge import HPGauge
 
 name = "MainState"
 
@@ -84,7 +84,7 @@ def update():
     if len(dragon) == 0:
         dragon = [Dragon(n * 140 - 70) for n in range(1, 6)]
         for d in range(len(dragon)):
-            hp_gauge += [Hp_gauge(dragon[d].x, dragon[d].y)]
+            hp_gauge += [HPGauge(dragon[d].x, dragon[d].y)]
 
     dra = []
     bul = []

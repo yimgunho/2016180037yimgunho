@@ -28,6 +28,14 @@ class Character:
 
     def draw(self, hit):
         self.image.clip_draw(128 * self.frame, 0, 128, 128, self.x, self.y, 140, 140)
+        self.draw_hp()
+        if hit > 0:
+            self.damage.draw(self.x + 50, self.y + 50, 100, 100)
+            self.timer = (self.timer + 1) % 20
+            if self.timer < 10:
+                self.hit_effect.draw(350, 420, 700, 840)
+
+    def draw_hp(self):
         if self.hp == 3:
             self.full_hp.draw(300, 800)
             self.full_hp.draw(350, 800)
@@ -40,11 +48,6 @@ class Character:
             self.full_hp.draw(300, 800)
             self.no_hp.draw(350, 800)
             self.no_hp.draw(400, 800)
-        if hit > 0:
-            self.damage.draw(self.x + 50, self.y + 50, 100, 100)
-            self.timer = (self.timer + 1) % 20
-            if self.timer < 10:
-                self.hit_effect.draw(350, 420, 700, 840)
 
 
 
